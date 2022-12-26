@@ -1,0 +1,91 @@
+#include<iostream>
+#include<stack>
+using namespace std;
+struct node
+{
+char data;
+node *left;
+node *right;
+};
+node* nnode;node* root;
+class Tree {
+public:
+char pre[11];
+void create();
+void postorder(node*);
+void delet(node*);
+};
+void Tree::create()
+{
+stack <node*> s1,s2;
+char ch;
+cout<<"Enter expression:"<<endl;
+for(int i=0;i<11;i++)
+{
+cin>>pre[i];
+}
+cout<<"your pre[] array is"<<endl;
+for(int i=0;i<11;i++)
+{
+cout<<pre[i]<<" ";
+}
+int i=10;
+while(i!=-1)
+{
+ch=pre[i];
+nnode=new node;
+nnode->left=NULL;
+nnode->right=NULL;
+nnode->data=ch;
+if(int(ch)>=97 && int(ch)<=122)
+{
+s1.push(nnode);
+}
+else
+{
+nnode->left=s1.top();
+s1.pop();
+nnode->right=s1.top();
+s1.pop();
+s1.push(nnode);
+}
+i--;
+}
+}
+void Tree::postorder(node *root) {
+if (root == NULL){ return; }
+stack <node*> s1,s2;
+node *temp = root;
+s1.push(temp);
+while (!s1.empty()) {
+temp = s1.top();
+s1.pop();
+s2.push(temp);
+if (temp -> left != NULL) {s1.push(temp -> left);}
+if (temp -> right != NULL) {s1.push(temp -> right);}
+}
+cout<<endl;
+cout<<"postorder of above expression is:"<<endl;
+while(!s2.empty()) {
+cout << s2.top()->data <<" ";
+s2.pop();
+}
+cout << endl;
+}
+void Tree::delet(node* node)
+{
+if(node==NULL)
+return;
+delet(node->left);
+delet(node->right);
+delete node;
+}
+int main() {
+Tree t;
+t.create();
+t.postorder(nnode);
+t.delet(root);
+root=NULL;
+cout<<"Tree is empty";
+return 0;
+}
